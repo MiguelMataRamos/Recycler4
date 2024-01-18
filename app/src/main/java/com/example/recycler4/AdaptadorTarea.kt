@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recycler4.databinding.ItemTareaBinding
 
-class AdaptadorTarea(var listatareas: MutableList<Tarea>, var listener: Clicks) :
+class AdaptadorTarea(private var listatareas: MutableList<Tarea>, private var listener: Clicks) :
     RecyclerView.Adapter<AdaptadorTarea.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
