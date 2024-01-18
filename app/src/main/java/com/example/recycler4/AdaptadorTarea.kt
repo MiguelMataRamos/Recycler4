@@ -46,6 +46,7 @@ class AdaptadorTarea(var listatareas: MutableList<Tarea>, var listener: Clicks) 
 
         }
 
+
     }
 
     fun addTarea(tarea: Tarea) {
