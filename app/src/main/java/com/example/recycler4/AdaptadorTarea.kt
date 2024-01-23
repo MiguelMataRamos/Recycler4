@@ -28,6 +28,7 @@ class AdaptadorTarea(private var listatareas: MutableList<Tarea>, private var li
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var tarea = listatareas[position]
 
+        holder.bind.Tarea.setOnCheckedChangeListener(null)
         holder.bind.Tarea.text = tarea.nombre
         holder.bind.Tarea.isChecked = tarea.completado
 
@@ -36,13 +37,8 @@ class AdaptadorTarea(private var listatareas: MutableList<Tarea>, private var li
         }
 
         holder.bind.Tarea.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                tarea.completado = true
-                listener.onTareaCheck(tarea)
-            } else {
-                tarea.completado = false
-                listener.onTareaCheck(tarea)
-            }
+
+            listener.onTareaCheck(tarea)
 
         }
 
@@ -54,7 +50,7 @@ class AdaptadorTarea(private var listatareas: MutableList<Tarea>, private var li
         notifyDataSetChanged()
     }
 
-    fun deleteTarea(tarea: Tarea){
+    fun deleteTarea(tarea: Tarea) {
         listatareas.remove(tarea)
         notifyDataSetChanged()
     }

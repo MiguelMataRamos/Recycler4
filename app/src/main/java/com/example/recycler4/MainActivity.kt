@@ -3,6 +3,8 @@ package com.example.recycler4
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -60,17 +62,12 @@ class MainActivity : AppCompatActivity(), Clicks {
     }
 
     fun getData(){
-        var data = mutableListOf(
-            Tarea("Tarea 1", true),
+        var data = mutableListOf<Tarea>(
+            Tarea("Tarea 1", false),
             Tarea("Tarea 2", false),
             Tarea("Tarea 3", false),
-            Tarea("Tarea 4", true),
+            Tarea("Tarea 4", false),
             Tarea("Tarea 5", false),
-            Tarea("Tarea 6", false),
-            Tarea("Tarea 7", false),
-            Tarea("Tarea 8", false),
-            Tarea("Tarea 9", false),
-            Tarea("Tarea 10", false)
         )
 
         data.forEach{tarea ->
@@ -117,6 +114,7 @@ class MainActivity : AppCompatActivity(), Clicks {
             .setMessage("¿Estas seguro de eliminar la tarea ${tarea.nombre.uppercase()}?")
             .setPositiveButton("Si") { _, _ ->
                 adaptador.deleteTarea(tarea)
+                adaptadorCompletas.deleteTarea(tarea)
                 popUp("Tarea eliminada")
                 true
             }
@@ -129,16 +127,19 @@ class MainActivity : AppCompatActivity(), Clicks {
     }
 
     override fun onTareaCheck(tarea: Tarea) {
-        if (tarea.completado) {
-            popUp("Tarea completada")
-            adaptador.deleteTarea(tarea)
-            adaptadorCompletas.addTarea(tarea)
-        } else {
-            popUp("Tarea incompleta")
-            adaptadorCompletas.deleteTarea(tarea)
-            adaptador.addTarea(tarea)
+        Handler(Looper.getMainLooper()).post {
+            if (tarea.completado) {
+                tarea.completado = false
+                popUp("Tarea incompleta")
+                adaptadorCompletas.deleteTarea(tarea)
+                adaptador.addTarea(tarea)
+            } else {
+                tarea.completado = true
+                popUp("Tarea completada")
+                adaptador.deleteTarea(tarea)
+                adaptadorCompletas.addTarea(tarea)
+            }
         }
-
     }
 
 
